@@ -15,7 +15,9 @@ let user = {
   0: {
     id: 0,
     name: 'John Doe',
-    todos: [0, 1]
+    todos: [0, 1],
+    totalCount: 2,
+    completedCount: 1
   }
 };
 
@@ -44,9 +46,25 @@ const getAllTodo = () => {
   return items;
 }
 
+const updateTodo = (id, title, isDone) => {
+  let target = todos[id];
+  target.title = title || target.title;
+  target.isDone = isDone != null ? isDone : target.isDone;
+  return target;
+}
+
+const updateUser = (id, totalCount, isDone) => {
+  let target = user[id];
+  target.totalCount = totalCount | target.totalCount;
+  target.completedCount = isDone ? target.completedCount + 1: target.completedCount - 1;
+  return target;
+}
+
 export {
   getTodo,
   createTodo,
   getUser,
-  getAllTodo
+  getAllTodo,
+  updateTodo,
+  updateUser
 }

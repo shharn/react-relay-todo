@@ -1,3 +1,7 @@
+type Mutation {
+  toggleTodoStatus(input: ToggleTodoStatusMutationInput!): ToggleTodoStatusMutationPayload
+}
+
 # An object with an ID
 interface Node {
   # The id of the object.
@@ -53,6 +57,18 @@ type TodoEdge {
 
   # A cursor for use in pagination
   cursor: String!
+}
+
+input ToggleTodoStatusMutationInput {
+  isDone: Boolean!
+  id: String!
+  clientMutationId: String
+}
+
+type ToggleTodoStatusMutationPayload {
+  todo: Todo
+  viewer: User
+  clientMutationId: String
 }
 
 # User

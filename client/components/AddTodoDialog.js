@@ -1,17 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { 
-  Button,
-  TemporaryDrawer,
-  TemporaryDrawerContent,
-  TemporaryDrawerHeader,
-  FormField,
-  TextField,
-  Typography
- } from 'rmwc';
 import chalk from 'chalk';
 
-class AddTodoDrawer extends Component {
+class AddTodoDialog extends Component {
   constructor(props) {
     super(props)
     
@@ -41,9 +32,9 @@ class AddTodoDrawer extends Component {
   }
 }
 
-AddTodoDrawer.propTypes = {
+AddTodoDialog.propTypes = {
   editMode: PropTypes.bool.isRequired,
   toggleEditMode: PropTypes.func.isRequired
 };
 
-export default AddTodoDrawer;
+export default AddTodoDialog;

@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 // import PropTypes from 'prop-types'
-import { 
-  Button
- } from 'rmwc';
-import AddTodoDrawer from './AddTodoDrawer';
+import AddTodoDialog from './AddTodoDialog';
 
 export default class AddTodo extends Component {
   constructor(props) {

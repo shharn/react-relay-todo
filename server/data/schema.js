@@ -13,7 +13,8 @@ import {
   fromGlobalId,
   connectionArgs,
   connectionDefinitions,
-  connectionFromArray
+  connectionFromArray,
+  mutationWithClientMutationId
 } from 'graphql-relay';
 
 import { 
@@ -24,7 +25,9 @@ import {
 import { 
   getTodo, 
   getUser, 
-  getAllTodo 
+  getAllTodo,
+  updateTodo,
+  updateUser
 } from './api';
 
 const { nodeInterface, nodeField } = nodeDefinitions(
@@ -104,8 +107,41 @@ const queryType = new GraphQLObjectType({
   })
 });
 
+const toggleTodoStatusMutation = mutationWithClientMutationId({
+  name: 'ToggleTodoStatusMutation',
+  inputFields: {
+    isDone: { type: new GraphQLNonNull(GraphQLBoolean) },
+    id: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  outputFields: {
+    todo: {
+      type: todoType
+    },
+    viewer: {
+      type: userType
+    }
+  },
+  mutateAndGetPayload: ({isDone, id}) => {
+    const realId = fromGlobalId(id).id;
+    const updatedTodo = updateTodo(realId, null, isDone);
+    const updatedViewer = updateUser(0, null, isDone);
+    return {
+      todo: updatedTodo,
+      viewer: updatedViewer
+    };
+  }
+});
+
+const mutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: () => ({
+    toggleTodoStatus: toggleTodoStatusMutation
+  })
+});
+
 const schema = new GraphQLSchema({
-  query: queryType
+  query: queryType,
+  mutation: mutationType
 });
 
 export default schema;

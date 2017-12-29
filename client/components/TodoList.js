@@ -5,10 +5,9 @@ import {
   createFragmentContainer,
   graphql
 } from 'react-relay';
+import { List } from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 
-import {
-  List
-} from 'rmwc';
 
 class TodoList extends Component {
   _renderChildren() {
@@ -18,9 +17,12 @@ class TodoList extends Component {
 
   render() {
     return (
-      <List>
-        {this._renderChildren()}
-      </List>
+      <div>
+        <List>
+          <Subheader>Tasks</Subheader>
+          {this._renderChildren()}
+        </List>
+      </div>
     )
   }
 }
