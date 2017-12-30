@@ -15,6 +15,7 @@ if (document.body) {
 
 ReactDOM.render(
   <QueryRenderer
+    style={{width: '100%', height: '100%'}}
     environment={environment}
     query={graphql`
       query AppQuery {

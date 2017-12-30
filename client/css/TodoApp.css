@@ -1,3 +1,17 @@
-.rootContainer {
-  min-width: 230px;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body > div {
+  height: 100%;
+  width: 100%;
+}
+
+.appContainer {
+  display: flex;
+  align-items: center;
+  height: inherit;
 }

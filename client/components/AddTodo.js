@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 // import PropTypes from 'prop-types'
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import AddTodoDialog from './AddTodoDialog';
+import '../css/AddTodo.css';
 
 export default class AddTodo extends Component {
   constructor(props) {
@@ -20,8 +23,10 @@ export default class AddTodo extends Component {
   render() {
     return (
       <div className="addTodoContainer">
-        <Button raised theme={['secondary-bg']} style={{fontSize:'1.8rem', textAlign: 'center', margin: '0 auto', display: 'block'}} onClick={this._toggleEditMode}>+</Button>
-        <AddTodoDrawer editMode={this.state.editMode} toggleEditMode={this._toggleEditMode} />
+        <FloatingActionButton mini={true} style={{textAlign: 'center', margin: '0 auto'}} onClick={this._toggleEditMode}>
+          <ContentAdd />
+        </FloatingActionButton>
+        <AddTodoDialog open={this.state.editMode} closeDialog={this._toggleEditMode} />
       </div>
     )
   }

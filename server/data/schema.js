@@ -27,7 +27,8 @@ import {
   getUser, 
   getAllTodo,
   updateTodo,
-  updateUser
+  updateUser,
+  createTodo
 } from './api';
 
 const { nodeInterface, nodeField } = nodeDefinitions(
@@ -131,6 +132,26 @@ const toggleTodoStatusMutation = mutationWithClientMutationId({
     };
   }
 });
+
+const addTodoMutation = mutationWithClientMutationId({
+  name: 'AddTodoMutation',
+  inputFields: {
+    title: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  },
+  outputFields: {
+    todo: {
+      type: todoType
+    }
+  },
+  mutateAndGetPayload: ( { title } ) => {
+    const todo = createTodo(title);
+    return {
+      todo
+    };
+  })
+})
 
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',

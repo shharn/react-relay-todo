@@ -1,3 +1,5 @@
+import { Todo } from './dataType';
+
 let todos = {
   0: {
     id: 0,
@@ -28,10 +30,17 @@ const getTodo = (id) => {
   return todos[id];
 }
 
-const createTodo = (title, isDone) => {
-  let newTodo = new Todo(nextTodoId++, title, isDone);
+const createTodo = (title) => {
+  let newTodo = new Todo(nextTodoId++, title, false);
   todos[newTodo.id] = newTodo;
+  addTodoToUser(0, newTodo.id);
   return newTodo;
+}
+
+const addTodoToUser = (userId, todoId) => {
+  const targetUser = user[userId];
+  targetUser.todos.push(todoIs);
+  targetUser.totalCount = targetUser.totalCount + 1;
 }
 
 const getUser = () => {
@@ -67,4 +76,4 @@ export {
   getAllTodo,
   updateTodo,
   updateUser
-}
+};

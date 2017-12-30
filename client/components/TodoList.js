@@ -7,7 +7,8 @@ import {
 } from 'react-relay';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-
+import Divider from 'material-ui/Divider';
+import '../css/TodoList.css';
 
 class TodoList extends Component {
   _renderChildren() {
@@ -17,10 +18,13 @@ class TodoList extends Component {
 
   render() {
     return (
-      <div>
-        <List>
+      <div style={{height: ' 86%'}}>
+        <List style={{height: '100%'}}>
           <Subheader>Tasks</Subheader>
-          {this._renderChildren()}
+          <Divider style={{marginLeft: 15, marginRight: 15}}/>
+          <div className="listItems">
+            {this._renderChildren()}
+          </div>
         </List>
       </div>
     )
