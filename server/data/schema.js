@@ -183,8 +183,9 @@ const deleteTodoMutation = mutationWithClientMutationId({
       type: todoType
     },
     viewer: {
-      type: userType
+      type: userType,
       resolve: () => getUser()
+    }
   },
   mutateAndGetPayload: ( { todoId, userId } ) => {
     let realTodoId = fromGlobalId(todoId).id,

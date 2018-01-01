@@ -9,9 +9,22 @@ type AddTodoMutationPayload {
   clientMutationId: String
 }
 
+input DeleteTodoMutationInput {
+  todoId: String!
+  userId: String!
+  clientMutationId: String
+}
+
+type DeleteTodoMutationPayload {
+  todo: Todo
+  viewer: User
+  clientMutationId: String
+}
+
 type Mutation {
   toggleTodoStatus(input: ToggleTodoStatusMutationInput!): ToggleTodoStatusMutationPayload
   addTodo(input: AddTodoMutationInput!): AddTodoMutationPayload
+  deleteTodo(input: DeleteTodoMutationInput!): DeleteTodoMutationPayload
 }
 
 # An object with an ID

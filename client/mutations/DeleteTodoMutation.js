@@ -11,7 +11,7 @@ const mutation = graphql`
         id
         title
         isDone
-      },
+      }
       viewer {
         id
         totalCount
@@ -40,18 +40,22 @@ function commit(
 ) {
   return commitMutation(
     environment,
-    variables: {
-      input: {
-        todoId: todoId,
-        userId: user.id
+    {
+      mutation,
+      variables: {
+        input: {
+          todoId: todoId,
+          userId: user.id
+        }
+      },
+      updater: store => {
+        const payload = store.getRootField('deleteTodo');
+        const todoRecord = payload.getLinkedRecord('todo');
+        sharedUpdater(store, user, todoRecord.getValue('id'));
+      },
+      optimisticUpdater: store => {
+        sharedUpdater(store, user, todoId);
       }
-    },
-    updater: store => {
-      const payload = store.getRootField('deleteTodo');
-      sharedUpdater(store, user, payload.getValue('todo').id);
-    },
-    optimisticUpdater: store => {
-      sharedUpdater(store, user, todoId);
     }
   );
 }

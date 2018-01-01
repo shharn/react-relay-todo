@@ -9,6 +9,7 @@ import Divider from 'material-ui/Divider';
 import Checkbox from 'material-ui/Checkbox';
 import Close from 'material-ui/svg-icons/navigation/Close';
 import ToggleTodoStatusMutation from '../mutations/ToggleTodoStatusMutation';
+import DeleteTodoMutation from '../mutations/DeleteTodoMutation';
 
 const dividerStyle = {
   marginLeft: 15,
@@ -56,7 +57,11 @@ class Todo extends Component {
   }
 
   _handleClickOnIcon() {
-    console.log('Clicked on Icon');
+    DeleteTodoMutation.commit(
+      this.props.relay.environment,
+      this.props.todo.id,
+      this.props.viewer
+    );
   }
 
   render() {
