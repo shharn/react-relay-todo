@@ -7,6 +7,7 @@ import {
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Checkbox from 'material-ui/Checkbox';
+import Close from 'material-ui/svg-icons/navigation/Close';
 import ToggleTodoStatusMutation from '../mutations/ToggleTodoStatusMutation';
 
 const dividerStyle = {
@@ -16,8 +17,14 @@ const dividerStyle = {
 
 class Todo extends Component {
   constructor(props) {
-    super(props)
-    this._toggleStatus = this._toggleStatus.bind(this)
+    super(props);
+    this.state = {
+      isMouseOver: false
+    };
+    this._toggleStatus = this._toggleStatus.bind(this);
+    this._handleMouseEnter = this._handleMouseEnter.bind(this);
+    this._handleMouseLeave = this._handleMouseLeave.bind(this);
+    this._handleClickOnIcon = this._handleClickOnIcon.bind(this)
   }
   
   _toggleStatus(event, isInputChecked) {
@@ -31,18 +38,38 @@ class Todo extends Component {
 
   _createCheckbox() {
     return <Checkbox 
-      defaultChecked={this.props.todo.isDone}
+      checked={this.props.todo.isDone}
       onCheck={this._toggleStatus}
       />;
   }
 
+  _handleMouseEnter() {
+    this.setState({
+      isMouseOver: true
+    });
+  }
+
+  _handleMouseLeave() {
+    this.setState({
+      isMouseOver: false
+    });
+  }
+
+  _handleClickOnIcon() {
+    console.log('Clicked on Icon');
+  }
+
   render() {
     return (
-      <div>
+      <div onMouseEnter={this._handleMouseEnter} onMouseLeave={this._handleMouseLeave}>
         <Divider style={dividerStyle}/>
         <ListItem 
           primaryText={this.props.todo.title}
-          leftCheckbox={this._createCheckbox()} />
+          leftCheckbox={this._createCheckbox()}
+          rightIcon= {this.state.isMouseOver ? 
+            <Close style={{ marginRight: 20 }} onClick={this._handleClickOnIcon}/> :
+            undefined}
+          />
          {this.props.last ? <Divider style={dividerStyle}/> : void 0}
       </div>
     )

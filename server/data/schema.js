@@ -14,7 +14,8 @@ import {
   connectionArgs,
   connectionDefinitions,
   connectionFromArray,
-  mutationWithClientMutationId
+  mutationWithClientMutationId,
+  cursorForObjectInConnection
 } from 'graphql-relay';
 
 import { 
@@ -28,7 +29,8 @@ import {
   getAllTodo,
   updateTodo,
   updateUser,
-  createTodo
+  createTodo,
+  deleteTodo
 } from './api';
 
 const { nodeInterface, nodeField } = nodeDefinitions(
@@ -70,7 +72,10 @@ const todoType = new GraphQLObjectType({
   interfaces: [ nodeInterface ]
 });
 
-const { connectionType: todoConnection } = connectionDefinitions({ nodeType: todoType });
+const { 
+  connectionType: todoConnection,
+  edgeType: todoEdgeType 
+} = connectionDefinitions({ nodeType: todoType });
 const userType = new GraphQLObjectType({
   name: 'User',
   description: 'User',
@@ -141,8 +146,18 @@ const addTodoMutation = mutationWithClientMutationId({
     }
   },
   outputFields: {
-    todo: {
-      type: todoType
+    todoEdge: {
+      type: todoEdgeType,
+      resolve: ( { todo } ) => {
+        return {
+          cursor: cursorForObjectInConnection(getAllTodo(), todo),
+          node: todo
+        };
+      }
+    },
+    viewer: {
+      type: userType,
+      resolve: () => getUser()
     }
   },
   mutateAndGetPayload: ( { title } ) => {
@@ -150,13 +165,43 @@ const addTodoMutation = mutationWithClientMutationId({
     return {
       todo
     };
-  })
-})
+  }
+});
+
+const deleteTodoMutation = mutationWithClientMutationId({
+  name: 'DeleteTodoMutation',
+  inputFields: {
+    todoId: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    userId: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  },
+  outputFields: {
+    todo: {
+      type: todoType
+    },
+    viewer: {
+      type: userType
+      resolve: () => getUser()
+  },
+  mutateAndGetPayload: ( { todoId, userId } ) => {
+    let realTodoId = fromGlobalId(todoId).id,
+          realUserId = fromGlobalId(userId).id;
+    const todo = deleteTodo(realTodoId, realUserId);
+    return {
+      todo
+    };
+  }
+});
 
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    toggleTodoStatus: toggleTodoStatusMutation
+    toggleTodoStatus: toggleTodoStatusMutation,
+    addTodo: addTodoMutation,
+    deleteTodo: deleteTodoMutation
   })
 });
 

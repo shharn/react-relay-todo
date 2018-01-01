@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import AddTodoDialog from './AddTodoDialog';
+import PropTypes from 'prop-types'
+import { createFragmentContainer, graphql } from 'react-relay';
 import '../css/AddTodo.css';
 
-export default class AddTodo extends Component {
+class AddTodo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,8 +27,26 @@ export default class AddTodo extends Component {
         <FloatingActionButton mini={true} style={{textAlign: 'center', margin: '0 auto'}} onClick={this._toggleEditMode}>
           <ContentAdd />
         </FloatingActionButton>
-        <AddTodoDialog open={this.state.editMode} closeDialog={this._toggleEditMode} />
+        { this.state.editMode ?
+            <AddTodoDialog viewer={this.props.viewer} open={this.state.editMode} closeDialog={this._toggleEditMode} /> :
+            void 0
+        }
       </div>
     )
   }
 }
+
+AddTodo.propTypes = {
+  viewer: PropTypes.object.isRequired
+};
+
+export default createFragmentContainer(
+  AddTodo,
+  graphql`
+    fragment AddTodo_viewer on User {
+      id
+      completedCount
+      ...AddTodoDialog_viewer
+    }
+  `
+);

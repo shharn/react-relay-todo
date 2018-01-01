@@ -27,7 +27,7 @@ class TodoApp extends Component {
           <div className="appContainer">
             <Paper style={paperStyle} zDepth={3} rounded={false}>
               <TodoList viewer={this.props.viewer} />
-              <AddTodo />
+              <AddTodo viewer={this.props.viewer} />
             </Paper>
           </div>
         </MuiThemeProvider>
@@ -46,6 +46,7 @@ export default createFragmentContainer(TodoApp, {
       id
       totalCount
       ...TodoList_viewer
+      ...AddTodo_viewer
     }
   `
 });

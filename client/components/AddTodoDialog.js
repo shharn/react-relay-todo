@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import chalk from 'chalk';
 import RaisedButton from 'material-ui/RaisedButton';
 import { fullWhite } from 'material-ui/styles/colors';
 import Done from 'material-ui/svg-icons/action/Done';
 import Close from 'material-ui/svg-icons/navigation/Close';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import AddTodoMutation from '../mutations/AddTodoMutation';
+import keycode from 'keycode';
+import { 
+  createFragmentContainer,
+  graphql
+ } from 'react-relay';
 
 class AddTodoDialog extends Component {
   constructor(props) {
@@ -16,6 +21,8 @@ class AddTodoDialog extends Component {
     };
     this._handleChange = this._handleChange.bind(this)
     this._submitInput = this._submitInput.bind(this)
+    this._handleKeyUp = this._handleKeyUp.bind(this)
+    
   }
   
   _handleChange(event) {
@@ -24,8 +31,25 @@ class AddTodoDialog extends Component {
     });
   }
 
+  _handleKeyUp(event) {
+    switch(event.keyCode) {
+      case keycode('Enter'):
+        this._submitInput();
+        break;
+      case keycode('Esc'):
+        this.props.closeDialog();
+        break;
+      default:
+        break;
+    }
+  }
+
   _submitInput() {
-    console.log(chalk.blue(this.state.inputValue));
+    AddTodoMutation.commit(
+      this.props.relay.environment,
+      this.state.inputValue,
+      this.props.viewer
+    );
     this.props.closeDialog();
   }
 
@@ -56,7 +80,8 @@ class AddTodoDialog extends Component {
           <TextField 
             value={this.state.inputValue} 
             onChange={this._handleChange}
-            floatingLabelText="Your Todo Content"/>
+            floatingLabelText="Your Todo Content"
+            onKeyUp={this._handleKeyUp}/>
         </Dialog>
       </div>
     )
@@ -65,7 +90,18 @@ class AddTodoDialog extends Component {
 
 AddTodoDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  closeDialog: PropTypes.func.isRequired
+  closeDialog: PropTypes.func.isRequired,
+  relay: PropTypes.object.isRequired,
+  viewer: PropTypes.object.isRequired
 };
 
-export default AddTodoDialog;
+export default createFragmentContainer(
+  AddTodoDialog,
+  graphql`
+    fragment AddTodoDialog_viewer on User {
+      id
+      totalCount
+      completedCount
+    }
+  `
+);

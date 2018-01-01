@@ -13,7 +13,8 @@ import '../css/TodoList.css';
 class TodoList extends Component {
   _renderChildren() {
     const todoLength = this.props.viewer.todos.edges.length;
-    return this.props.viewer.todos.edges.map((edge, index) => <Todo key={edge.node.id} todo={edge.node} viewer={this.props.viewer} last={todoLength === index + 1}/>)
+    return this.props.viewer.todos.edges.map(
+      (edge, index) => <Todo key={edge.node.id} todo={edge.node} viewer={this.props.viewer} last={todoLength === index + 1}/>)
   }
 
   render() {

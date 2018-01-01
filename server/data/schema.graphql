@@ -1,5 +1,17 @@
+input AddTodoMutationInput {
+  title: String!
+  clientMutationId: String
+}
+
+type AddTodoMutationPayload {
+  todoEdge: TodoEdge
+  viewer: User
+  clientMutationId: String
+}
+
 type Mutation {
   toggleTodoStatus(input: ToggleTodoStatusMutationInput!): ToggleTodoStatusMutationPayload
+  addTodo(input: AddTodoMutationInput!): AddTodoMutationPayload
 }
 
 # An object with an ID

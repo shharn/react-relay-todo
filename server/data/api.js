@@ -1,4 +1,5 @@
-import { Todo } from './dataType';
+export class Todo {};
+export class User {};
 
 let todos = {
   0: {
@@ -28,24 +29,27 @@ let nextTodoId = 2;
 
 const getTodo = (id) => {
   return todos[id];
-}
+};
 
 const createTodo = (title) => {
-  let newTodo = new Todo(nextTodoId++, title, false);
+  let newTodo = new Todo();
+  newTodo.id = nextTodoId++;
+  newTodo.title = title;
+  newTodo.isDone = false;
   todos[newTodo.id] = newTodo;
   addTodoToUser(0, newTodo.id);
   return newTodo;
-}
+};
 
 const addTodoToUser = (userId, todoId) => {
   const targetUser = user[userId];
-  targetUser.todos.push(todoIs);
+  targetUser.todos.push(todoId);
   targetUser.totalCount = targetUser.totalCount + 1;
-}
+};
 
 const getUser = () => {
   return user[0];
-}
+};
 
 const getAllTodo = () => {
   let items = [];
@@ -53,21 +57,44 @@ const getAllTodo = () => {
     items.push(todos[id]);
   }
   return items;
-}
+};
 
 const updateTodo = (id, title, isDone) => {
   let target = todos[id];
   target.title = title || target.title;
   target.isDone = isDone != null ? isDone : target.isDone;
   return target;
-}
+};
+
+const deleteTodo = (todoId, userId) => {
+  let newTodos = {},
+    oldTodo = todos[todoId];
+  for (let key in todos) {
+    if (key !== todoId) {
+      newTodos[key] = todos[key];
+    }
+  }
+  todos = newTodos;
+  deleteTodoFromUser(userId, todoId);
+  return oldTodo;
+};
+
+const deleteTodoFromUser = (userId, oldTodo) => {
+  let targetUser = user[userId];
+  targetUser.todos = user[userId].todos.filter(id => id !== oldTodo.id);
+  targetUser.totalCount -= 1;
+  if (targetUser.completedCount < 1) {
+    throw new Error('Cannot delete todo Id from the user who has no completed tasks');
+  }
+  targetUser.completedCount = oldTodo.isDone ? targetUser.completedCount - 1 : targetUser.completedCount;
+};
 
 const updateUser = (id, totalCount, isDone) => {
   let target = user[id];
   target.totalCount = totalCount | target.totalCount;
   target.completedCount = isDone ? target.completedCount + 1: target.completedCount - 1;
   return target;
-}
+};
 
 export {
   getTodo,
@@ -75,5 +102,6 @@ export {
   getUser,
   getAllTodo,
   updateTodo,
-  updateUser
+  updateUser,
+  deleteTodo
 };

@@ -22,7 +22,6 @@ function getOptimisticResponse(isDone, todo, user) {
       user.completedCount + 1 :
       user.completedCount - 1;
   }
-  console.log('viewerPayload - ', viewerPayload);
   return {
     toggleTodoStatus: {
       todo: {

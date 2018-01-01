@@ -35,6 +35,7 @@
     "express-graphql": "^0.6.11",
     "graphql": "0.11.7",
     "graphql-relay": "^0.5.4",
+    "keycode": "^2.1.9",
     "material-ui": "^0.20.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
